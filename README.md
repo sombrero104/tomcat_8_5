@@ -1,79 +1,76 @@
-## Welcome to Apache Tomcat!
+https://tomcat.apache.org/download-80.cgi
+http://mirror.apache-kr.org/tomcat/tomcat-8/v8.5.38/README.html
 
-### What Is It?
+introduction
+https://tomcat.apache.org/tomcat-8.5-doc/building.html#Introduction
 
-The Apache Tomcat® software is an open source implementation of the Java
-Servlet, JavaServer Pages, Java Expression Language and Java WebSocket
-technologies. The Java Servlet, JavaServer Pages, Java Expression Language and
-Java WebSocket specifications are developed under the
-[Java Community Process](https://jcp.org/en/introduction/overview).
+ant 사용하기
+https://mainia.tistory.com/1283
 
-The Apache Tomcat software is developed in an open and participatory
-environment and released under the
-[Apache License version 2](https://www.apache.org/licenses/). The Apache Tomcat
-project is intended to be a collaboration of the best-of-breed developers from
-around the world. We invite you to participate in this open development
-project. To learn more about getting involved,
-[click here](https://tomcat.apache.org/getinvolved.html) or keep reading.
+General > Editors > File Associations 에 .xml 추가.
+Ant Editor를 디폴트로 사용하도록 설정.
 
-Apache Tomcat software powers numerous large-scale, mission-critical web
-applications across a diverse range of industries and organizations. Some of
-these users and their stories are listed on the
-[PoweredBy wiki page](https://wiki.apache.org/tomcat/PoweredBy).
+svn 받기
+https://svn.apache.org/repos/asf/tomcat/archive/tc8.5.x/tags
+TOMCAT_8_5_38를 checkout.
 
-Apache Tomcat, Tomcat, Apache, the Apache feather, and the Apache Tomcat
-project logo are trademarks of the Apache Software Foundation.
+---------------------------------------------------------------------------------------------------------------
 
-### Get It
+Java > Build Path > Classpath Variables 설정 필요.
 
-For every major Tomcat version there is one download page containing
-links to the latest binary and source code downloads, but also
-links for browsing the download directories and archives:
-- [Tomcat 9](https://tomcat.apache.org/download-90.cgi)
-- [Tomcat 8](https://tomcat.apache.org/download-80.cgi)
-- [Tomcat 7](https://tomcat.apache.org/download-70.cgi)
+TOMCAT_LIBS_BASE :
+The same location as the base.path setting in build.properties, where the binary dependencies have been downloaded
+ANT_HOME :
+the base path of Ant 1.9.8 or later
 
-To facilitate choosing the right major Tomcat version one, we have provided a
-[version overview page](https://tomcat.apache.org/whichversion.html).
+를 이렇게 설정.
 
-### Documentation
+TOMCAT_LIBS_BASE :
+C:\[PROJECT HOME]\tomcat-build-libs
+ANT_HOME :
+C:\[STS HOME]\plugins\org.apache.ant_1.10.1.v20170504-0840
 
-The documentation available as of the date of this release is
-included in the docs webapp which ships with tomcat. You can access that webapp
-by starting tomcat and visiting http://localhost:8080/docs/ in your browser.
-The most up-to-date documentation for each version can be found at:
-- [Tomcat 9](https://tomcat.apache.org/tomcat-9.0-doc/)
-- [Tomcat 8](https://tomcat.apache.org/tomcat-8.5-doc/)
-- [Tomcat 7](https://tomcat.apache.org/tomcat-7.0-doc/)
+--
+build.properties 파일의 base.path 경로 수정.
 
-### Installation
+# base.path=${user.home}/tomcat-build-libs
+base.path=C:/[PROJECT HOME]/tomcat-build-libs
 
-Please see [RUNNING.txt](RUNNING.txt) for more info.
+---------------------------------------------------------------------------------------------------------------
 
-### Licensing
+https://svn.apache.org/repos/asf/tomcat/archive/tc8.5.x/tags/
 
-Please see [LICENSE](LICENSE) for more info.
 
-### Support and Mailing List Information
 
-* Free community support is available through the
-[tomcat-users](https://tomcat.apache.org/lists.html#tomcat-users) email list and
-a dedicated [IRC channel](https://tomcat.apache.org/irc.html) (#tomcat on
-Freenode).
+build.xml
+<property file="C:/[PROJECT HOME]/build.properties"/>
+<srcfiles file="C:/[PROJECT HOME]/build.properties" />
 
-* If you want freely available support for running Apache Tomcat, please see the
-resources page [here](https://tomcat.apache.org/findhelp.html).
 
-* If you want to be informed about new code releases, bug fixes,
-security fixes, general news and information about Apache Tomcat, please
-subscribe to the
-[tomcat-announce](https://tomcat.apache.org/lists.html#tomcat-announce) email
-list.
+---------------------------------------------------------------------------------------------------------------
 
-* If you have a concrete bug report for Apache Tomcat, please see the
-instructions for reporting a bug
-[here](https://tomcat.apache.org/bugreport.html).
+https://stackoverflow.com/questions/5094786/eclipse-java-launch-configuration-file-path
+launch 설정파일 경로
+<workspace>/.metadata/.plugins/org.eclipse.debug.core/.launches
+제공된 아래 파일을 편집해서 추가.
+IDE 재시작하면 launch 설정에 Java Project로 새로 추가되어 있음.
+/Tomcat_8_5_trunk/res/ide-support/eclipse/start-tomcat.launch
+/Tomcat_8_5_trunk/res/ide-support/eclipse/stop-tomcat.launch
 
-### Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for more info.
+--
+라이브러리가 일부만 다운로드 되어서 아래에서 가져와서 수정함. (버전 정보가 다름)
+https://github.com/waihoyu/Apache-Tomcat-9/tree/master/TOMCAT_LIBS_BASE
+--
+다시 빌드하면 실행됨.
+--
+---------------------------------------------------------------------------------------------------------------
+
+/bin/startup.sh -> /bin/catalina.sh start -> org.apache.catalina.startup.Bootstrap start
+
+main(): daemon(catalinaDaemon -> org.apache.catalina.startup.Catalina)이 없을 경우 초기화(init() -> initClassLoaders() -> createClassLoader() 로 commonLoader, catalinaLoader, sharedLoader를 생성하여 각 라이브러리를 불러옴.)한 데몬을 저장한 Bootstrap을 만들고 daemon.load(args); 이후 데몬을 실행. daemon.start(); 
+
+---------------------------------------------------------------------------------------------------------------
+
+
+
